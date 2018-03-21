@@ -2,33 +2,6 @@
 
 class MaterialsController extends Controller
 {
-
-    public function actionAdd()
-    {
-        if(!empty($_POST)){
-            Materials::putData($_POST);
-        }
-
-        $this->layout='ml';
-        $this->render('put');
-    }
-
-    public function actionEdit()
-    {
-        $id = intval(Yii::app()->request->getParam('id'));
-        if(empty($id)){
-            $this->redirect(["/materials/index"]);exit;
-        }
-        if(!empty($_POST)){
-            Materials::editRow($_POST);
-            $this->redirect(["/materials/index"]);exit;
-        }
-
-        $data = Materials::getDataId($id);
-        $this->layout='ml';
-        $this->render('edit',['data'=>$data,'id'=>$id]);
-    }
-
     public function actionIndex()
     {
 
@@ -49,4 +22,32 @@ class MaterialsController extends Controller
             'pages'=>$pages,
         ]);
     }
+
+    public function actionAdd()
+    {
+        if(!empty($_POST)){
+            Materials::putData($_POST);
+        }
+
+        $this->layout='ml';
+        $this->render('add');
+    }
+
+    public function actionEdit()
+    {
+        $id = intval(Yii::app()->request->getParam('id'));
+        if(empty($id)){
+            $this->redirect(["/materials/index"]);exit;
+        }
+        if(!empty($_POST)){
+            Materials::editRow($_POST);
+            $this->redirect(["/materials/index"]);exit;
+        }
+
+        $data = Materials::getDataId($id);
+        $this->layout='ml';
+        $this->render('edit',['data'=>$data,'id'=>$id]);
+    }
+
+
 }
