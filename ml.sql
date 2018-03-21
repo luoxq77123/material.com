@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-03-20 23:02:40
+Date: 2018-03-21 17:24:36
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -21,22 +21,19 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `ml_materials`;
 CREATE TABLE `ml_materials` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ml_id` tinyint(4) NOT NULL COMMENT '材料ID',
+  `ml_id` varchar(255) NOT NULL COMMENT '材料ID',
   `su_id` tinyint(4) DEFAULT NULL COMMENT '供应商ID',
   `ml_no` varchar(255) DEFAULT '' COMMENT '送货编号',
-  `ku_nums` tinyint(4) DEFAULT '0' COMMENT '库号',
+  `ku_nums` varchar(255) DEFAULT '' COMMENT '库号',
   `num` decimal(15,2) DEFAULT NULL COMMENT '重量',
   `user_cl` tinyint(4) DEFAULT NULL COMMENT '材料员',
   `remarks` varchar(255) DEFAULT NULL COMMENT '备注',
   `create_time` datetime DEFAULT NULL COMMENT '添加时间',
   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
   `add_time` datetime DEFAULT NULL COMMENT '材料入库时间',
+  `batch` varchar(255) DEFAULT '' COMMENT '批次',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='材料入库记录表';
-
--- ----------------------------
--- Records of ml_materials
--- ----------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=316 DEFAULT CHARSET=utf8 COMMENT='材料入库记录表';
 
 -- ----------------------------
 -- Table structure for ml_use_summary
@@ -66,7 +63,3 @@ CREATE TABLE `ml_use_summary` (
   `s_number` varchar(255) DEFAULT '' COMMENT '编号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='生产缸号使用材料汇总表';
-
--- ----------------------------
--- Records of ml_use_summary
--- ----------------------------
