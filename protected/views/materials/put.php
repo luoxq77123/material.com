@@ -5,7 +5,7 @@
        <td>供应商</td>
        <td>送货编号</td>
        <td>入库仓号</td>
-       <td>今日入库总量</td>
+       <td>今日入库总量（单位：吨）</td>
        <td>材料员</td>
        <td>备注</td>
     </tr>
@@ -71,7 +71,7 @@
 
         //console.log(datas)
         $.ajax({
-                    url:"<?= $this->createUrl("/materials/putstorage") ?>",
+                    url:"<?= $this->createUrl("/materials/add") ?>",
                     type:"POST",
                     dataType:"json",
                     data:{t:datas},

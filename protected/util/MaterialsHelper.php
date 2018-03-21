@@ -4,9 +4,9 @@ class MaterialsHelper
     /**
      * 获取材料名称
      */
-    public static function getMaterialName()
+    public static function getMaterialName($key='')
     {
-        return [
+        $materialName = [
             'cement'=>'水泥',
             'ash'=>'火山灰',
             'gravel'=>'碎石',
@@ -14,6 +14,11 @@ class MaterialsHelper
             'river_sand'=>'河沙',
             'additive'=>'外加剂',
         ];
+        if(empty($key)){
+            return $materialName;
+        }else{
+            return isset($materialName[$key]) ? $materialName[$key] : '';
+        }
     }
 
     /**
@@ -32,7 +37,7 @@ class MaterialsHelper
         if(empty($key)){
             return $factoryName;
         }else{
-            return isset($factoryName[$key]) ? $factoryName[$key] : '';
+            return isset($factoryName[$key]) ? $factoryName[$key]: '';
         }
 
     }
@@ -40,11 +45,16 @@ class MaterialsHelper
     /**
      * 获取材料员
      */
-    public static function getMaterialsUser()
+    public static function getMaterialsUser($key='')
     {
-        return [
+        $user= [
             '1'=>'陈光强'
         ];
+        if(empty($key)){
+            return $user;
+        }else{
+            return isset($user[$key])?$user[$key]:'';
+        }
     }
 
 

@@ -117,63 +117,105 @@ class Materials extends CActiveRecord
 		));
 	}
 
-    public static function putData($data,$batch="")
+    /**
+     * 添加记录
+     * @param $data
+     * @param string $batch
+     */
+    public static function putData($data)
     {
-        if(!empty($data['t'])){
+        if (!empty($data['t'])) {
 
-            if(empty($batch)){
-                $batch = date("YmdHis");
-                $dateTime = date("Y-m-d H:i:s");
-                $insert = <<<sql
+            $batch = date("YmdHis");
+            $dateTime = date("Y-m-d H:i:s");
+            $insert = <<<sql
                 INSERT INTO ml_materials (ml_id,su_id,ml_no,ku_nums,num,user_cl,remarks,create_time,update_time,add_time,batch) 
                 VALUES(:ml_id,:su_id,:ml_no,:ku_nums,:num,:user_cl,:remarks,:create_time,:update_time,:add_time,:batch)
 sql;
-                $connection = Yii::app()->db;
-                $command = $connection->createCommand("$insert");
+            $connection = Yii::app()->db;
+            $command = $connection->createCommand("$insert");
 
-                $transaction=$connection->beginTransaction();
-                try
-                {
-                    foreach ($data['t'] as $val){
-                        $num = is_numeric($val['num'])?$val['num']*1000:0;
-                        if(empty($num)){
-                            continue;
-                        }
-                        $command->bindValue(":ml_id",$val['ml_id']);
-                        $command->bindValue(":su_id",$val['su_id']);
-                        $command->bindValue(":ml_no",$val['ml_no']);
-                        $command->bindValue(":ku_nums",$val['ku_nums']);
-                        $command->bindValue(":num",$num);
-                        $command->bindValue(":user_cl",$val['user_cl']);
-                        $command->bindValue(":remarks",$val['remarks']);
-                        $command->bindValue(":create_time",$dateTime);
-                        $command->bindValue(":update_time",$dateTime);
-                        $command->bindValue(":add_time",$val['add_time']);
-                        $command->bindValue(":batch",$batch);
-                        $command->execute();
+            $transaction = $connection->beginTransaction();
 
+            try {
+                foreach ($data['t'] as $val) {
+                    $num = is_numeric($val['num']) ? $val['num'] * 1000 : 0;
+                    if (empty($num)) {
+                        continue;
                     }
-                    $transaction->commit();
+                    $command->bindValue(":ml_id", $val['ml_id']);
+                    $command->bindValue(":su_id", $val['su_id']);
+                    $command->bindValue(":ml_no", $val['ml_no']);
+                    $command->bindValue(":ku_nums", $val['ku_nums']);
+                    $command->bindValue(":num", $num);
+                    $command->bindValue(":user_cl", $val['user_cl']);
+                    $command->bindValue(":remarks", $val['remarks']);
+                    $command->bindValue(":create_time", $dateTime);
+                    $command->bindValue(":update_time", $dateTime);
+                    $command->bindValue(":add_time", $val['add_time']);
+                    $command->bindValue(":batch", $batch);
+                    $command->execute();
                 }
-                catch(Exception $e) // 如果有一条查询失败，则会抛出异常
-                {
-                    $transaction->rollBack();
-                }
 
+                $transaction->commit();
 
-
-            }else{
-
+            } catch (Exception $e)  {
+                $transaction->rollBack();
             }
 
         }
 
     }
 
-    public static function getData()
+    /**
+     * 获取所有记录
+     * @param null $page
+     * @param null $limit
+     * @return mixed
+     */
+    public static function getData($page=null,$limit=null)
     {
-        $data = Yii::app()->db->createCommand("select * from ml_materials")->order(" id desc")->queryAll();
-        var_dump($data);
+        if($page===null && $limit===null){
+            $sql = "select count(*) from ml_materials";
+            return Yii::app()->db->createCommand($sql)->queryScalar();
+        }else{
+            $sql = "select * from ml_materials limit :offset,:limit";
+            $offset = ($page - 1) * $limit;
+            $data = Yii::app()->db->createCommand($sql)
+                ->bindValue(':offset',$offset)
+                ->bindValue(':limit',$limit)
+                ->order(" id desc")->queryAll();
+            return $data;
+        }
+    }
+
+    /**
+     * 获取单条记录
+     */
+    public static function getDataId($id)
+    {
+        $sql = "select * from ml_materials where id=:id limit 1";
+        $data = Yii::app()->db->createCommand($sql)->bindValue(":id",$id)->queryRow();
+        return $data;
+    }
+
+    /**
+     * 修改单条记录
+     */
+    public static function editRow($data)
+    {
+        $num = is_numeric($data['num']) ? $data['num'] * 1000 : 0;
+        $columns=[
+            'add_time'=>$data['add_time'],
+            'su_id'=>$data['su_id'],
+            'ml_no'=>$data['ml_no'],
+            'ku_nums'=>$data['ku_nums'],
+            'num'=>$num,
+            'user_cl'=>$data['user_cl'],
+            'remarks'=>$data['remarks'],
+            'update_time'=>date("Y-m-d H:i:s")
+        ];
+        Yii::app()->db->createCommand()->update('ml_materials',$columns,"id=:id",[":id"=>$data['id']]);
     }
 
 }
