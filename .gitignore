@@ -1,0 +1,9 @@
+assets/*
+protected/runtime/*
+protected/data/*.db
+themes/classic/views/
+.idea
+.idea/*
+assets/
+phpinfo.php
+protected/runtime/
