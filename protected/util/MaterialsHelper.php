@@ -43,6 +43,25 @@ class MaterialsHelper
     }
 
     /**
+     * 获取材料缸号
+     */
+    public static function getGh()
+    {
+        $ghArr = [
+            1=>'砂浆(c15)',
+            2=>'砂浆(c30)',
+            3=>'C15',
+            //4=>'C20',
+            5=>'C25',
+            6=>'C30',
+            7=>'C30P6',
+            //8=>'C35',
+            //9=>'C40',
+        ];
+
+    }
+
+    /**
      * 获取材料员
      */
     public static function getMaterialsUser($key='')

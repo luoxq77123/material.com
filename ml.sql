@@ -60,6 +60,6 @@ CREATE TABLE `ml_use_summary` (
   `capacity` decimal(15,2) DEFAULT '0.00' COMMENT '容量',
   `add_time` datetime DEFAULT NULL COMMENT '添加时间',
   `update_time` datetime DEFAULT NULL COMMENT '最后修改时间',
-  `s_number` varchar(255) DEFAULT '' COMMENT '编号',
+  `s_number` varchar(255) DEFAULT '' COMMENT '批次',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='生产缸号使用材料汇总表';
