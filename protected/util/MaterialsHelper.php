@@ -58,7 +58,7 @@ class MaterialsHelper
             //8=>'C35',
             //9=>'C40',
         ];
-
+        return $ghArr;
     }
 
     /**

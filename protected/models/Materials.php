@@ -179,7 +179,7 @@ sql;
             $sql = "select count(*) from ml_materials";
             return Yii::app()->db->createCommand($sql)->queryScalar();
         }else{
-            $sql = "select * from ml_materials limit :offset,:limit";
+            $sql = "select * from ml_materials order by id  desc limit :offset,:limit";
             $offset = ($page - 1) * $limit;
             $data = Yii::app()->db->createCommand($sql)
                 ->bindValue(':offset',$offset)

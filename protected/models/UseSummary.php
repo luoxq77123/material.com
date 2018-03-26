@@ -22,6 +22,7 @@
  * @property string $m_p_additive
  * @property string $m_u_additive
  * @property string $capacity
+ * @property string $create_time
  * @property string $add_time
  * @property string $update_time
  * @property string $s_number
@@ -58,10 +59,10 @@ class UseSummary extends CActiveRecord
 			array('gh_amount', 'length', 'max'=>10),
 			array('m_p_water, m_u_water, m_p_cement, m_u_cement, m_p_ash, m_u_ash, m_p_gravel, m_u_gravel, m_p_sand, m_u_sand, m_p_river_sand, m_u_river_sand, m_p_additive, m_u_additive, capacity', 'length', 'max'=>15),
 			array('s_number', 'length', 'max'=>255),
-			array('add_time, update_time', 'safe'),
+			array('add_time, update_time, create_time', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, gh_type, gh_amount, m_p_water, m_u_water, m_p_cement, m_u_cement, m_p_ash, m_u_ash, m_p_gravel, m_u_gravel, m_p_sand, m_u_sand, m_p_river_sand, m_u_river_sand, m_p_additive, m_u_additive, capacity, add_time, update_time, s_number', 'safe', 'on'=>'search'),
+			array('id, gh_type, gh_amount, m_p_water, m_u_water, m_p_cement, m_u_cement, m_p_ash, m_u_ash, m_p_gravel, m_u_gravel, m_p_sand, m_u_sand, m_p_river_sand, m_u_river_sand, m_p_additive, m_u_additive, capacity, create_time, add_time, update_time, s_number', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -100,6 +101,7 @@ class UseSummary extends CActiveRecord
 			'm_p_additive' => 'M P Additive',
 			'm_u_additive' => 'M U Additive',
 			'capacity' => 'Capacity',
+			'create_time' => 'Create Time',
 			'add_time' => 'Add Time',
 			'update_time' => 'Update Time',
 			's_number' => 'S Number',
@@ -135,6 +137,7 @@ class UseSummary extends CActiveRecord
 		$criteria->compare('m_p_additive',$this->m_p_additive,true);
 		$criteria->compare('m_u_additive',$this->m_u_additive,true);
 		$criteria->compare('capacity',$this->capacity,true);
+		$criteria->compare('create_time',$this->create_time,true);
 		$criteria->compare('add_time',$this->add_time,true);
 		$criteria->compare('update_time',$this->update_time,true);
 		$criteria->compare('s_number',$this->s_number,true);
@@ -143,4 +146,122 @@ class UseSummary extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+    /**
+     * 添加记录
+     * @param $data
+     * @param string $batch
+     */
+    public static function putData($data)
+    {
+        if (!empty($data['t'])) {
+
+            $batch = date("YmdHis");
+            $dateTime = date("Y-m-d H:i:s");
+
+            $connection = Yii::app()->db;
+
+            $transaction = $connection->beginTransaction();
+
+            try {
+                foreach ($data['t'] as $val) {
+                    $gh_type = $val['gh_type'];//缸号类型
+                    $gh_amount = $val['gh_amount'];//方量
+                    $m_p_water = $val['m_p_water'];//水(配比)
+                    $m_p_cement = $val['m_p_cement'];//水泥(配比)
+                    $m_p_ash = $val['m_p_ash'];//火山灰(配比)
+                    $m_p_gravel = $val['m_p_gravel'];//碎石(配比)
+                    $m_p_sand = $val['m_p_sand'];//机制砂(配比)
+                    $m_p_river_sand = $val['m_p_river_sand'];//河沙(配比)
+                    $m_p_additive = $val['m_p_additive'];//外加剂(配比)
+
+                    if(!is_numeric($gh_type) || !is_numeric($gh_amount) || !is_numeric($m_p_water) || !is_numeric($m_p_cement) || !is_numeric($m_p_ash) || !is_numeric($m_p_gravel) || !is_numeric($m_p_sand) || !is_numeric($m_p_river_sand) || !is_numeric($m_p_additive)){
+                        continue;
+                    }
+                    $capacity = $m_p_water + $m_p_cement + $m_p_ash + $m_p_gravel + $m_p_sand + $m_p_river_sand + $m_p_additive;
+                    $connection->createCommand()->insert('ml_use_summary', array(
+                        'gh_type' => $gh_type,
+                        'gh_amount' => $gh_amount,
+                        'm_p_water' => $m_p_water,
+                        'm_u_water' => $m_p_water * $gh_amount,
+                        'm_p_cement' => $m_p_cement,
+                        'm_u_cement' => $m_p_cement * $gh_amount,
+                        'm_p_ash' => $m_p_ash,
+                        'm_u_ash' => $m_p_ash * $gh_amount,
+                        'm_p_gravel' => $m_p_gravel,
+                        'm_u_gravel' => $m_p_gravel * $gh_amount,
+                        'm_p_sand' => $m_p_sand,
+                        'm_u_sand' => $m_p_sand * $gh_amount,
+                        'm_p_river_sand' => $m_p_river_sand,
+                        'm_u_river_sand' => $m_p_river_sand * $gh_amount,
+                        'm_p_additive' => $m_p_additive,
+                        'm_u_additive' => $m_p_additive * $gh_amount,
+                        'capacity' => $capacity,
+                        'add_time' => $data['add_time'],
+                        'create_time' => $dateTime,
+                        'update_time' => $dateTime,
+                        's_number' => $batch,
+                    ));
+                }
+
+                $transaction->commit();
+
+            } catch (Exception $e)  {
+                $transaction->rollBack();
+            }
+
+        }
+
+    }
+
+    /**
+     * 获取所有记录
+     * @param null $page
+     * @param null $limit
+     * @return mixed
+     */
+    public static function getData($page=null,$limit=null)
+    {
+        if($page===null && $limit===null){
+            $sql = "select count(*) from ml_use_summary";
+            return Yii::app()->db->createCommand($sql)->queryScalar();
+        }else{
+            $sql = "select * from ml_use_summary order by id  desc limit :offset,:limit ";
+            $offset = ($page - 1) * $limit;
+            $data = Yii::app()->db->createCommand($sql)
+                ->bindValue(':offset',$offset)
+                ->bindValue(':limit',$limit)
+                ->order(" id desc")->queryAll();
+            return $data;
+        }
+    }
+
+    /**
+     * 获取单条记录
+     */
+    public static function getDataId($id)
+    {
+        $sql = "select * from ml_use_summary where id=:id limit 1";
+        $data = Yii::app()->db->createCommand($sql)->bindValue(":id",$id)->queryRow();
+        return $data;
+    }
+
+    /**
+     * 修改单条记录
+     */
+    public static function editRow($data)
+    {
+        $num = is_numeric($data['num']) ? $data['num'] * 1000 : 0;
+        $columns=[
+            'add_time'=>$data['add_time'],
+            'su_id'=>$data['su_id'],
+            'ml_no'=>$data['ml_no'],
+            'ku_nums'=>$data['ku_nums'],
+            'num'=>$num,
+            'user_cl'=>$data['user_cl'],
+            'remarks'=>$data['remarks'],
+            'update_time'=>date("Y-m-d H:i:s")
+        ];
+        Yii::app()->db->createCommand()->update('ml_use_summary',$columns,"id=:id",[":id"=>$data['id']]);
+    }
 }

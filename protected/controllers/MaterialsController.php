@@ -14,8 +14,6 @@ class MaterialsController extends Controller
 
         $data = Materials::getData($page,$limit);
 
-
-
         $this->layout='ml';
         $this->render('index',[
             'data'=>$data,
@@ -27,6 +25,7 @@ class MaterialsController extends Controller
     {
         if(!empty($_POST)){
             Materials::putData($_POST);
+            $this->redirect(["/materials/index"]);exit;
         }
 
         $this->layout='ml';

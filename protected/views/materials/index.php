@@ -18,7 +18,7 @@
         ?>
     <tr>
         <td><?= MaterialsHelper::getMaterialName($val['ml_id'])?></td>
-        <td><?= empty(strtotime($val['add_time'])) ? '' : date("Y-m-d", strtotime($val['add_time'])) ?></td>
+        <td><?= toolHelper::timeYmd($val['add_time']) ?></td>
         <td><?= $su_id ?></td>
         <td><?= $val['ml_no'] ?></td>
         <td><?= $val['ku_nums'] ?></td>
@@ -28,15 +28,19 @@
         <td><button><a href="<?= $this->createUrl('materials/edit',['id'=> $val['id']]) ?>">修改</a></button></td>
     </tr>
     <?php } ?>
+    <tr>
+        <td colspan="12">
+            <?php
+                $this->widget('CLinkPager',array(
+                    'header' => '',
+                    'prevPageLabel' => '上一页',
+                    'nextPageLabel' => '下一页',
+                    'pages' => $pages,
+                ));
+            ?>
+        </td>
+    </tr>
 </table>
 
 
-<?php
 
-
-$this->widget('CLinkPager',array(
-    'header' => '',
-    'prevPageLabel' => '上一页',
-    'nextPageLabel' => '下一页',
-    'pages' => $pages,
-));
