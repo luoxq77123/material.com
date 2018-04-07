@@ -76,7 +76,7 @@
                     dataType:"json",
                     data:{t:datas},
                     success: function (result) {
-                        alert(result);
+                        //alert(result);
                     }
         })
     });

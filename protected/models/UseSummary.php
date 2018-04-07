@@ -251,17 +251,86 @@ class UseSummary extends CActiveRecord
      */
     public static function editRow($data)
     {
-        $num = is_numeric($data['num']) ? $data['num'] * 1000 : 0;
-        $columns=[
-            'add_time'=>$data['add_time'],
-            'su_id'=>$data['su_id'],
-            'ml_no'=>$data['ml_no'],
-            'ku_nums'=>$data['ku_nums'],
-            'num'=>$num,
-            'user_cl'=>$data['user_cl'],
-            'remarks'=>$data['remarks'],
-            'update_time'=>date("Y-m-d H:i:s")
-        ];
-        Yii::app()->db->createCommand()->update('ml_use_summary',$columns,"id=:id",[":id"=>$data['id']]);
+        if (!empty($data)) {
+            $batch = date("YmdHis");
+            $dateTime = date("Y-m-d H:i:s");
+            $connection = Yii::app()->db;
+            try {
+                    $gh_type = $data['gh_type']; //缸号类型
+                    $gh_amount = $data['gh_amount']; //方量
+                    $m_p_water = $data['m_p_water']; //水(配比)
+                    $m_p_cement = $data['m_p_cement']; //水泥(配比)
+                    $m_p_ash = $data['m_p_ash']; //火山灰(配比)
+                    $m_p_gravel = $data['m_p_gravel']; //碎石(配比)
+                    $m_p_sand = $data['m_p_sand']; //机制砂(配比)
+                    $m_p_river_sand = $data['m_p_river_sand']; //河沙(配比)
+                    $m_p_additive = $data['m_p_additive']; //外加剂(配比)
+
+                    if (!is_numeric($gh_type) || !is_numeric($gh_amount) || !is_numeric($m_p_water) || !is_numeric($m_p_cement) || !is_numeric($m_p_ash) || !is_numeric($m_p_gravel) || !is_numeric($m_p_sand) || !is_numeric($m_p_river_sand) || !is_numeric($m_p_additive)) {
+                       return false;
+                    }
+                    $capacity = $m_p_water + $m_p_cement + $m_p_ash + $m_p_gravel + $m_p_sand + $m_p_river_sand + $m_p_additive;
+                    $connection->createCommand()->update('ml_use_summary', array(
+                        'gh_type' => $gh_type,
+                        'gh_amount' => $gh_amount,
+                        'm_p_water' => $m_p_water,
+                        'm_u_water' => $m_p_water * $gh_amount,
+                        'm_p_cement' => $m_p_cement,
+                        'm_u_cement' => $m_p_cement * $gh_amount,
+                        'm_p_ash' => $m_p_ash,
+                        'm_u_ash' => $m_p_ash * $gh_amount,
+                        'm_p_gravel' => $m_p_gravel,
+                        'm_u_gravel' => $m_p_gravel * $gh_amount,
+                        'm_p_sand' => $m_p_sand,
+                        'm_u_sand' => $m_p_sand * $gh_amount,
+                        'm_p_river_sand' => $m_p_river_sand,
+                        'm_u_river_sand' => $m_p_river_sand * $gh_amount,
+                        'm_p_additive' => $m_p_additive,
+                        'm_u_additive' => $m_p_additive * $gh_amount,
+                        'capacity' => $capacity,
+                        'add_time' => $data['add_time'],
+                        'update_time' => date("Y-m-d H:i:s"),
+                    ),"id=:id",[":id"=>$data['id']]);
+            }
+            catch (Exception $e) {
+
+            }
+
+        }
+    }
+
+
+    public static function getExportData($start)
+    {
+        $sql = <<<sql
+        select
+        sum(m_u_cement) as cement,
+        sum(m_u_ash) as ash,
+        sum(m_u_gravel) as gravel,
+        sum(m_u_sand) as sand,
+        sum(m_u_river_sand) as river_sand,
+        sum(m_u_additive) as additive
+
+        from ml_use_summary where add_time <= :start order by id desc
+sql;
+
+
+        $data = Yii::app()->db->createCommand($sql)
+            ->bindValue(':start',$start)
+            ->order(" id desc")->queryAll();
+        return $data;
+
+    }
+
+    //获取时间段使用量
+    public static function getRangeData($start,$end)
+    {
+        $sql = "select * from ml_use_summary where add_time>=:start and add_time<=:end order by id desc";
+
+        $data = Yii::app()->db->createCommand($sql)
+            ->bindValue(':start', $start)
+            ->bindValue(':end', date("Y-m-d 23:59:59", strtotime($end)))
+            ->order(" id desc")->queryAll();
+        return $data;
     }
 }

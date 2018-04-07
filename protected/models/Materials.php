@@ -124,6 +124,7 @@ class Materials extends CActiveRecord
      */
     public static function putData($data)
     {
+        //var_dump($data);exit;
         if (!empty($data['t'])) {
 
             $batch = date("YmdHis");
@@ -160,6 +161,7 @@ sql;
                 $transaction->commit();
 
             } catch (Exception $e)  {
+                var_dump($e->getMessage());exit;
                 $transaction->rollBack();
             }
 
@@ -218,4 +220,33 @@ sql;
         Yii::app()->db->createCommand()->update('ml_materials',$columns,"id=:id",[":id"=>$data['id']]);
     }
 
+    /**
+     * 获取时间段内存储量
+     */
+    public static function getStorageData($start)
+    {
+        $sql = <<<sql
+        select sum(num),ml_id from ml_materials where add_time<=:start
+        group by ml_id
+sql;
+
+        $data = Yii::app()->db->createCommand($sql)
+            ->bindValue(':start',$start)
+            ->queryAll();
+        return $data;
+
+
+    }
+
+    //获取时间段库存量
+    public static function getRangeData($start,$end)
+    {
+        $sql = "select * from ml_materials where add_time>=:start and add_time<=:end order by id desc";
+
+        $data = Yii::app()->db->createCommand($sql)
+            ->bindValue(':start', $start)
+            ->bindValue(':end', date("Y-m-d 23:59:59", strtotime($end)))
+            ->order(" id desc")->queryAll();
+        return $data;
+    }
 }
