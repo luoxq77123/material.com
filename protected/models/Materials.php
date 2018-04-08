@@ -226,14 +226,17 @@ sql;
     public static function getStorageData($start)
     {
         $sql = <<<sql
-        select sum(num),ml_id from ml_materials where add_time<=:start
+        select sum(num) nums,ml_id from ml_materials where add_time<=:start
         group by ml_id
 sql;
 
         $data = Yii::app()->db->createCommand($sql)
             ->bindValue(':start',$start)
             ->queryAll();
-        return $data;
+        if(empty($data)){
+            return [];
+        }
+        return array_column($data,'nums','ml_id');
 
 
     }
@@ -249,4 +252,6 @@ sql;
             ->order(" id desc")->queryAll();
         return $data;
     }
+
+
 }

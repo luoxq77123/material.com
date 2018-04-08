@@ -317,7 +317,7 @@ sql;
 
         $data = Yii::app()->db->createCommand($sql)
             ->bindValue(':start',$start)
-            ->order(" id desc")->queryAll();
+            ->order(" id desc")->queryRow();
         return $data;
 
     }
@@ -333,4 +333,45 @@ sql;
             ->order(" id desc")->queryAll();
         return $data;
     }
+
+    //组装数据
+    public static function dataFormatUse($timeArr,$dataArr)
+    {
+        $ret = [];
+        if(empty($timeArr) || empty($dataArr))
+        {
+            return $ret;
+        }
+
+
+        foreach($timeArr as $val){
+            foreach($dataArr as $v){
+                if($val===$v['add_time']){
+                    $key = date("YmdHis",strtotime($val));
+                    $ret[$key][$v['gh_type']] = $v;
+                }
+            }
+        }
+        return $ret;
+    }
+
+    //组装数据
+    public static function dataFormatRep($timeArr,$dataArr)
+    {
+        $ret = [];
+        if (empty($timeArr) || empty($dataArr)) {
+            return $ret;
+        }
+
+        foreach ($timeArr as $val) {
+            foreach ($dataArr as $v) {
+                if ($val === $v['add_time']) {
+                    $key = date("YmdHis", strtotime($val));
+                    $ret[$key][$v['ml_id']] = $v['num'];
+                }
+            }
+        }
+        return $ret;
+    }
+
 }

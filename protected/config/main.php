@@ -19,6 +19,7 @@ return array(
 		'application.models.*',
 		'application.components.*',
 		'application.util.*',
+        'application.extensions.phpexcel.*',
 	),
 
 	'modules'=>array(
