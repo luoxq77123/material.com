@@ -3,8 +3,8 @@
     table,table tr, table tr td{border-collapse:collapse;border:1px solid grey; }
     td{height: 40px;}
 </style>
-<div style="margin: auto;width: 70%;">
-<table border="1" cellspacing="0" cellpadding="0">
+<div style="margin: auto;">
+<table border="1" cellspacing="0" cellpadding="0" style="margin: auto;">
     <tr align="center">
        <td width="80">材料名称</td>
        <td width="80">日期</td>

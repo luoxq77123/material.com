@@ -3,9 +3,17 @@ $materialName = MaterialsHelper::getMaterialName();
 $materialGh = MaterialsHelper::getGh();
 ?>
 <style>
+    a{text-decoration: none;}
     table{margin: auto;}
+    table,table tr, table tr td{border-collapse:collapse;border:1px solid grey; text-align: center;}
+    td{width:100px;height: 30px;}
 </style>
 <div style="width: ">
+    <div style="margin-left: 50px;height: 20px;padding: 10px 0;">
+        <button><a href="<?= $this->createUrl('usesummary/add') ?>">添加</a></button>
+        &nbsp;&nbsp;
+        <button><a href="<?= $this->createUrl('index/index') ?>">返回首页</a></button>
+    </div>
 <table border="1">
     <tr>
         <td>生产日期</td>
@@ -34,13 +42,18 @@ $materialGh = MaterialsHelper::getGh();
             <td><button><a href="<?= $this->createUrl('usesummary/edit',['id'=> $val['id']]) ?>">修改</a></button></td>
         </tr>
     <?php } ?>
+    <tr>
+        <td colspan="12">
+            <?php
+            $this->widget('CLinkPager', array(
+                'header' => '',
+                'prevPageLabel' => '上一页',
+                'nextPageLabel' => '下一页',
+                'pages' => $pages,
+            ));
+            ?>
+        </td>
+    </tr>
 </table>
-<?php
-$this->widget('CLinkPager',array(
-    'header' => '',
-    'prevPageLabel' => '上一页',
-    'nextPageLabel' => '下一页',
-    'pages' => $pages,
-));
-?>
+
 </div>

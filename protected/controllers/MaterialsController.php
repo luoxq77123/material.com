@@ -24,7 +24,7 @@ class MaterialsController extends Controller
     public function actionAdd()
     {
         if(!empty($_POST)){
-            //Materials::putData($_POST);
+            Materials::putData($_POST);
             echo json_encode(['status'=>0]);exit;
         }
 

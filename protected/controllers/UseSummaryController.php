@@ -24,7 +24,7 @@ class UseSummaryController extends Controller
     {
         if(!empty($_POST)){
             UseSummary::putData($_POST);
-            $this->redirect(["/usesummary/index"]);exit;
+            echo json_encode(['status'=>0]);exit;
         }
         $this->layout='ml';
         $this->render('add');

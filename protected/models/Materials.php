@@ -141,7 +141,7 @@ sql;
             try {
                 foreach ($data['t'] as $val) {
                     $num = is_numeric($val['num']) ? $val['num'] * 1000 : 0;
-                    if (empty($num)) {
+                    if (empty($num) || empty($val['add_time'])) {
                         continue;
                     }
                     $command->bindValue(":ml_id", $val['ml_id']);

@@ -5,7 +5,7 @@
 <div style="width: 80%;margin: auto;margin-top: 20%">
     <div style="margin: auto;width: 60%;">
     <form method="post" >
-        <div style=" width:60%; margin: auto;">
+        <div style="margin: auto; text-align: center;">
             导出时间： <input type="text" name="start" id="start" > -- <input type="text" name="end" id="end">
         </div>
 

@@ -4,6 +4,7 @@ $materialName = MaterialsHelper::getMaterialName();
 $materialGh = MaterialsHelper::getGh();
 ?>
 <style>
+    a{text-decoration: none;}
     input{width:70px;}
     table{margin: auto;}
 </style>
@@ -24,14 +25,14 @@ $materialGh = MaterialsHelper::getGh();
         ?>
         <tr align="center">
             <td><input type="hidden" name="gh_type" value="<?= $key?>"> <?= $val ?></td>
-            <td><input type="text" name="gh_amount" value="100"></td>
-            <td><input type="text" name="m_p_water" value="100"></td>
-            <td><input type="text" name="m_p_cement" value="100"></td>
-            <td><input type="text" name="m_p_ash" value="100"></td>
-            <td><input type="text" name="m_p_gravel" value="100"></td>
-            <td><input type="text" name="m_p_sand" value="100"></td>
-            <td><input type="text" name="m_p_river_sand" value="100"></td>
-            <td><input type="text" name="m_p_additive" value="100"></td>
+            <td><input type="text" name="gh_amount" value=""></td>
+            <td><input type="text" name="m_p_water" value=""></td>
+            <td><input type="text" name="m_p_cement" value=""></td>
+            <td><input type="text" name="m_p_ash" value=""></td>
+            <td><input type="text" name="m_p_gravel" value=""></td>
+            <td><input type="text" name="m_p_sand" value=""></td>
+            <td><input type="text" name="m_p_river_sand" value=""></td>
+            <td><input type="text" name="m_p_additive" value=""></td>
         </tr>
 
         <?php
@@ -39,14 +40,22 @@ $materialGh = MaterialsHelper::getGh();
     ?>
     <tr align="center">
         <input type="hidden" name="status" id="status" value="0">
-        <td colspan="9" ><input type="button" id="button" value="提交"></td>
+        <td colspan="9" >
+            <button><a href="<?= $this->createUrl('usesummary/index') ?>">返回列表</a></button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="button" id="button" value="提交">
+        </td>
     </tr>
 </table>
 
 <script>
     $('#button').on('click',function(){
+        var add_time = $("#add_time").val();
+        if(add_time==false){
+            alert('请选择时间');
+            return false;
+        }
+
         var sta = $("#status").val();
-        console.log(sta);
         if(sta !=0 ){
             return false;
         }
@@ -66,13 +75,14 @@ $materialGh = MaterialsHelper::getGh();
 
         console.log(datas)
         var add_time = $("#add_time").val();
+
         $.ajax({
             url:"<?= $this->createUrl("/usesummary/add") ?>",
             type:"POST",
             dataType:"json",
             data:{t:datas,add_time:add_time},
             success: function (result) {
-                alert(result);
+                window.location.href = '<?= $this->createUrl("/usesummary/index"); ?>';
             }
         })
     });
