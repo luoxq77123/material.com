@@ -311,7 +311,7 @@ class UseSummary extends CActiveRecord
         sum(m_u_river_sand) as river_sand,
         sum(m_u_additive) as additive
 
-        from ml_use_summary where add_time <= :start order by id desc
+        from ml_use_summary where add_time < :start order by id desc
 sql;
 
 

@@ -1,13 +1,19 @@
-<table border="1">
-    <tr>
-       <td>材料名称</td>
-       <td>日期</td>
-       <td>供应商</td>
-       <td>送货编号</td>
-       <td>入库仓号</td>
-       <td>今日入库总量（单位：吨）</td>
-       <td>材料员</td>
-       <td>备注</td>
+<style>
+    a{text-decoration: none;}
+    table{margin-top: 100px;}
+    td{height: 40px;}
+</style>
+<div style="margin: auto;width: 70%;">
+<table border="1" cellspacing="0" cellpadding="0">
+    <tr align="center">
+       <td width="80">材料名称</td>
+       <td width="80">日期</td>
+       <td width="80">供应商</td>
+       <td width="80">送货编号</td>
+       <td width="80">入库仓号</td>
+       <td width="200">今日入库总量（单位：吨）</td>
+       <td width="80">材料员</td>
+       <td width="80">备注</td>
     </tr>
     <?php
     $materialName = MaterialsHelper::getMaterialName();
@@ -17,7 +23,7 @@
         $materialsUser = MaterialsHelper::getMaterialsUser();
         ?>
 
-        <tr class="<?= $key ?>">
+        <tr class="<?= $key ?>" align="center">
             <td><input type="hidden" name="ml_id" value="<?= $key ?>" ><?= $val ?></td>
             <td><input type="text" name="add_time" id="add_time<?= $id_key?>" value=""></td>
             <td>
@@ -45,14 +51,28 @@
     } ?>
 
     <tr>
-        <td colspan="8" id="button">提交</td>
+        <input type="hidden" name="status" id="status" value="0">
+        <td colspan="8" align="center" >
+            <button><a href="<?= $this->createUrl('materials/index') ?>">返回列表</a></button>&nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="button">提交</button>
+        </td>
     </tr>
 
 </table>
 
+</div>
+
+
+
 <script>
 
     $('#button').on('click',function(){
+        var sta = $("#status").val();
+        console.log(sta);
+        if(sta !=0 ){
+            return false;
+        }
+        $("#status").val(1);
         var datas = [];
     	for(var i = 1 ; i < $('table tr').length - 1;i ++){
             var su_id = $("#su_id"+i).val();
@@ -76,7 +96,7 @@
                     dataType:"json",
                     data:{t:datas},
                     success: function (result) {
-                        //alert(result);
+                        window.location.href = '<?= $this->createUrl("/materials/index"); ?>';
                     }
         })
     });

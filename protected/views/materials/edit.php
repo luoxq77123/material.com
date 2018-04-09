@@ -12,19 +12,25 @@
     $materialsUser = MaterialsHelper::getMaterialsUser();
 ?>
 
+<style>
+    a{text-decoration: none;}
+    td{height:30px;}
+</style>
+<div style=" width:25%;margin: auto; margin-top: 100px;">
+
 
 <form action="" method="post">
-    <table border="1">
+    <table border="0" cellspacing="0" cellpadding="0">
         <tr>
-            <td>材料名称:</td>
+            <td align="right" width="120">材料名称：</td>
             <td><?= $ml_id ?></td>
         </tr>
         <tr>
-            <td>日期:</td>
+            <td align="right">日期：</td>
             <td><input type="text" name="add_time" id="add_time" value="<?= $add_time ?>"></td>
         </tr>
         <tr>
-            <td>供应商</td>
+            <td align="right">供应商：</td>
             <td>
                 <select name="su_id">
                     <?php foreach ($factoryName as $f_key=>$factory){ ?>
@@ -34,19 +40,19 @@
             </td>
         </tr>
         <tr>
-            <td>送货编号</td>
+            <td align="right">送货编号：</td>
             <td><input type="text" name="ml_no" value="<?= $ml_no ?>"></td>
         </tr>
         <tr>
-            <td>入库仓号</td>
+            <td align="right">入库仓号：</td>
             <td><input type="text" name="ku_nums" value="<?= $ku_nums ?>"></td>
         </tr>
         <tr>
-            <td>今日入库总量（单位：吨）</td>
-            <td><input type="text" name="num" value="<?= $num ?>"></td>
+            <td align="right">今日入库总量：</td>
+            <td><input type="text" name="num" value="<?= $num ?>">（单位：吨）</td>
         </tr>
         <tr>
-            <td>材料员</td>
+            <td align="right">材料员：</td>
             <td>
                 <select name="user_cl">
                     <?php foreach ($materialsUser as $m_key=>$materials){ ?>
@@ -56,16 +62,21 @@
             </td>
         </tr>
         <tr>
-            <td>备注</td>
+            <td align="right">备注：</td>
             <td><input type="text" name="remarks" value="<?= $remarks ?>"></td>
         </tr>
-        <tr>
+        <tr align="center">
             <input type="hidden" name="id" value="<?= $id ?>">
-            <td colspan="2"><input type="submit" value="修改"></td>
+
+            <td colspan="2">
+                <button><a href="<?= $this->createUrl('materials/index') ?>">返回列表</a></button>&nbsp;&nbsp;
+                <input type="submit" value="修改">
+            </td>
         </tr>
     </table>
 </form>
 
+</div>
 
 <script>
     laydate.render({

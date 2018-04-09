@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-03-21 17:24:36
+Date: 2018-04-09 08:48:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -58,8 +58,9 @@ CREATE TABLE `ml_use_summary` (
   `m_p_additive` decimal(15,2) DEFAULT '0.00' COMMENT '外加剂',
   `m_u_additive` decimal(15,2) DEFAULT '0.00' COMMENT '外加剂',
   `capacity` decimal(15,2) DEFAULT '0.00' COMMENT '容量',
-  `add_time` datetime DEFAULT NULL COMMENT '添加时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `add_time` datetime DEFAULT NULL COMMENT '添加入库时间',
   `update_time` datetime DEFAULT NULL COMMENT '最后修改时间',
   `s_number` varchar(255) DEFAULT '' COMMENT '批次',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='生产缸号使用材料汇总表';
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='生产缸号使用材料汇总表';

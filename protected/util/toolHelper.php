@@ -12,6 +12,7 @@ class toolHelper
         return date("Y-m-d",strtotime($time));
     }
 
+    //计算时间段内的天数
     public static function getDateFromRange($startdate, $enddate){
 
         $stimestamp = strtotime($startdate);

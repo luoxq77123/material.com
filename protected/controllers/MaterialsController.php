@@ -24,8 +24,8 @@ class MaterialsController extends Controller
     public function actionAdd()
     {
         if(!empty($_POST)){
-            Materials::putData($_POST);
-            $this->redirect(["/materials/index"]);exit;
+            //Materials::putData($_POST);
+            echo json_encode(['status'=>0]);exit;
         }
 
         $this->layout='ml';

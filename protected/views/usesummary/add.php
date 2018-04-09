@@ -38,12 +38,19 @@ $materialGh = MaterialsHelper::getGh();
     }
     ?>
     <tr align="center">
+        <input type="hidden" name="status" id="status" value="0">
         <td colspan="9" ><input type="button" id="button" value="提交"></td>
     </tr>
 </table>
 
 <script>
     $('#button').on('click',function(){
+        var sta = $("#status").val();
+        console.log(sta);
+        if(sta !=0 ){
+            return false;
+        }
+        $("#status").val(1);
         var datas = [];
         for(var i = 1 ; i < $('table tr').length - 1;i ++){
             var temp = {};

@@ -226,7 +226,7 @@ sql;
     public static function getStorageData($start)
     {
         $sql = <<<sql
-        select sum(num) nums,ml_id from ml_materials where add_time<=:start
+        select sum(num) nums,ml_id from ml_materials where add_time<:start
         group by ml_id
 sql;
 

@@ -5,6 +5,7 @@ $materialGh = MaterialsHelper::getGh();
 <style>
     table{margin: auto;}
 </style>
+<div style="width: ">
 <table border="1">
     <tr>
         <td>生产日期</td>
@@ -41,3 +42,5 @@ $this->widget('CLinkPager',array(
     'nextPageLabel' => '下一页',
     'pages' => $pages,
 ));
+?>
+</div>
