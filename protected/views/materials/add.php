@@ -1,6 +1,6 @@
 <style>
     a{text-decoration: none;}
-    table{margin-top: 100px;}
+    table,table tr, table tr td{border-collapse:collapse;border:1px solid grey; }
     td{height: 40px;}
 </style>
 <div style="margin: auto;width: 70%;">

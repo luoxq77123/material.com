@@ -2,7 +2,8 @@
     a {
         text-decoration: none;
     }
-    /*td{border: solid 1px grey;}*/
+    table,table tr, table tr td{border-collapse:collapse;border:1px solid grey; }
+
 </style>
 
 <div style="margin: auto;width: 60%;">

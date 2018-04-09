@@ -15,12 +15,13 @@
 <style>
     a{text-decoration: none;}
     td{height:30px;}
+    table,table tr, table tr td{border-collapse:collapse;border:1px solid grey; }
 </style>
 <div style=" width:25%;margin: auto; margin-top: 100px;">
 
 
 <form action="" method="post">
-    <table border="0" cellspacing="0" cellpadding="0">
+    <table cellspacing="0" cellpadding="0">
         <tr>
             <td align="right" width="120">材料名称：</td>
             <td><?= $ml_id ?></td>
