@@ -28,7 +28,7 @@ $materialGh = MaterialsHelper::getGh();
     </tr>
     <?php foreach($data as $val){ ?>
         <tr>
-            <td><?= toolHelper::timeYmd($val['add_time']) ?></td>
+            <td><?= ToolHelper::timeYmd($val['add_time']) ?></td>
             <td><?= isset($materialGh[$val['gh_type']])?$materialGh[$val['gh_type']]:'' ?></td>
             <td><?= $val['gh_amount'] ?></td>
             <td><?= $val['m_p_water'] ?></td>
@@ -39,7 +39,12 @@ $materialGh = MaterialsHelper::getGh();
             <td><?= $val['m_p_river_sand'] ?></td>
             <td><?= $val['m_p_additive'] ?></td>
             <td><?= $val['capacity'] ?></td>
-            <td><button><a href="<?= $this->createUrl('usesummary/edit',['id'=> $val['id']]) ?>">修改</a></button></td>
+            <td>
+                <button><a href="<?= $this->createUrl('usesummary/edit',['id'=> $val['id']]) ?>">修改</a></button>
+                <button class="index_del" data-id="<?= $val['id']; ?>">
+                    <span>删除</span>
+                </button>
+            </td>
         </tr>
     <?php } ?>
     <tr>
@@ -57,3 +62,30 @@ $materialGh = MaterialsHelper::getGh();
 </table>
 
 </div>
+
+
+<script>
+    $('.index_del').on('click', function () {
+        var id = $(this).data('id');
+        if (confirm("确定删除该记录吗?")) {
+            $.ajax({
+                url: "<?= $this->createUrl("/usesummary/del") ?>",
+                type: "POST",
+                dataType: "json",
+                data: {id: id},
+                success: function (result) {
+                    if (result.status == 0) {
+                        window.location.reload();
+                    } else {
+                        layer.open({
+                            content: result.msg,
+                            skin: 'msg',
+                            time: 3 //2秒后自动关闭
+                        });
+                    }
+                }
+            })
+        }
+    })
+
+</script>

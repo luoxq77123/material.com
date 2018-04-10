@@ -48,5 +48,16 @@ class MaterialsController extends Controller
         $this->render('edit',['data'=>$data,'id'=>$id]);
     }
 
+    public function actionDel()
+    {
+        $id = intval(Yii::app()->request->getParam('id'));
+        if(empty($id)){
+            ResponseHelper::backFormat(10100);
+        }
+        $ret = Materials::delRecord($id);
+        $status = !empty($ret) ? 0 : 40003;
+        ResponseHelper::backFormat($status);
+
+    }
 
 }

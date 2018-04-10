@@ -221,6 +221,14 @@ sql;
     }
 
     /**
+     * 删除记录
+     */
+    public static function delRecord($id)
+    {
+        return Yii::app()->db->createCommand()->delete('ml_materials',"id=:id",[":id"=>$id]);
+    }
+
+    /**
      * 获取时间段内存储量
      */
     public static function getStorageData($start)

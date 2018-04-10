@@ -22,7 +22,7 @@
             <td width="200">今日入库总量（单位：吨）</td>
             <td width="80">材料员</td>
             <td width="80">备注</td>
-            <td width="80">操作</td>
+            <td width="120">操作</td>
         </tr>
         <?php
         foreach ($data as $val) {
@@ -32,7 +32,7 @@
             ?>
             <tr align="center">
                 <td><?= MaterialsHelper::getMaterialName($val['ml_id']) ?></td>
-                <td><?= toolHelper::timeYmd($val['add_time']) ?></td>
+                <td><?= ToolHelper::timeYmd($val['add_time']) ?></td>
                 <td><?= $su_id ?></td>
                 <td><?= $val['ml_no'] ?></td>
                 <td><?= $val['ku_nums'] ?></td>
@@ -40,8 +40,11 @@
                 <td><?= MaterialsHelper::getMaterialsUser($val['user_cl']) ?></td>
                 <td><?= $val['remarks'] ?></td>
                 <td>
-                    <button>
+                    <button style="float: left;margin-left: 10px;">
                         <a href="<?= $this->createUrl('materials/edit', ['id' => $val['id']]) ?>">修改</a>
+                    </button>
+                    <button class="index_del" data-id="<?= $val['id']; ?>">
+                        <span>删除</span>
                     </button>
                 </td>
             </tr>
@@ -59,7 +62,34 @@
             </td>
         </tr>
     </table>
-
 </div>
 
+<script>
+    $('.index_del').on('click', function(){
+        var id = $(this).data('id');
+        if(confirm("确定删除该记录吗?")){
+            $.ajax({
+                url:"<?= $this->createUrl("/materials/del") ?>",
+                type:"POST",
+                dataType:"json",
+                data:{id:id},
+                success: function (result) {
+                    if(result.status==0){
+                        window.location.reload();
+                    }else{
+                        layer.open({
+                            content: result.msg,
+                            skin: 'msg',
+                            time: 3 //2秒后自动关闭
+                        });
+                    }
+
+                }
+            })
+        }
+
+
+    })
+
+</script>
 

@@ -1,5 +1,5 @@
 <?php
-class toolHelper
+class ToolHelper
 {
     /**
      * 时间格式化（YYYY-mm-dd）

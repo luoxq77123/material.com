@@ -300,6 +300,14 @@ class UseSummary extends CActiveRecord
     }
 
 
+    /**
+     * 删除记录
+     */
+    public static function delRecord($id)
+    {
+        return Yii::app()->db->createCommand()->delete('ml_use_summary', "id=:id", [":id" => $id]);
+    }
+
     public static function getExportData($start)
     {
         $sql = <<<sql

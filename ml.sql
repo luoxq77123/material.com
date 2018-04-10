@@ -1,4 +1,4 @@
-/*
+﻿/*
 Navicat MySQL Data Transfer
 
 Source Server         : localhost
@@ -33,7 +33,7 @@ CREATE TABLE `ml_materials` (
   `add_time` datetime DEFAULT NULL COMMENT '材料入库时间',
   `batch` varchar(255) DEFAULT '' COMMENT '批次',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=316 DEFAULT CHARSET=utf8 COMMENT='材料入库记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='材料入库记录表';
 
 -- ----------------------------
 -- Table structure for ml_use_summary
@@ -63,4 +63,4 @@ CREATE TABLE `ml_use_summary` (
   `update_time` datetime DEFAULT NULL COMMENT '最后修改时间',
   `s_number` varchar(255) DEFAULT '' COMMENT '批次',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='生产缸号使用材料汇总表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='生产缸号使用材料汇总表';

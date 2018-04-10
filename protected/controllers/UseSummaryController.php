@@ -47,10 +47,19 @@ class UseSummaryController extends Controller
         $this->render('edit',['data'=>$data,'id'=>$id]);
     }
 
+    public function actionDel()
+    {
+        $id = intval(Yii::app()->request->getParam('id'));
+        if(empty($id)){
+            ResponseHelper::backFormat(10100);
+        }
+        $ret = UseSummary::delRecord($id);
+        $status = !empty($ret) ? 0 : 40003;
+        ResponseHelper::backFormat($status);
+    }
+
     public function actionMexport()
     {
-
-
         if(!empty($_POST)){
             $start = Yii::app()->request->getParam('start');
             $end = Yii::app()->request->getParam('end');
@@ -65,12 +74,11 @@ class UseSummaryController extends Controller
             $rep_range_data = Materials::getRangeData($start,$end);
 
             //获取时间段内的天数
-            $dateArr = toolHelper::getDateFromRange($start,$end);
+            $dateArr = ToolHelper::getDateFromRange($start,$end);
 
             //组装数据
             $use_data = UseSummary::dataFormatUse($dateArr,$use_range_data);
             $rep_data = UseSummary::dataFormatRep($dateArr,$rep_range_data);
-
 
             $yday_total_cement = (empty($rep_start_data['cement']) ? 0 : $rep_start_data['cement']) - (empty($use_start_data['cement']) ? 0 : $use_start_data['cement']);
             $yday_total_ash = (empty($rep_start_data['ash']) ? 0 : $rep_start_data['ash']) - (empty($use_start_data['ash']) ? 0 : $use_start_data['ash']);
@@ -78,7 +86,6 @@ class UseSummaryController extends Controller
             $yday_total_sand = (empty($rep_start_data['sand']) ? 0 : $rep_start_data['sand']) - (empty($use_start_data['sand']) ? 0 : $use_start_data['sand']);
             $yday_total_river_sand = (empty($rep_start_data['river_sand']) ? 0 : $rep_start_data['river_sand']) - (empty($use_start_data['river_sand']) ? 0 : $use_start_data['river_sand']);
             $yday_total_additive = (empty($rep_start_data['additive']) ? 0 : $rep_start_data['additive']) - (empty($use_start_data['additive']) ? 0 : $use_start_data['additive']);
-
 
             $MaterialName = MaterialsHelper::getMaterialName();
             $getGh = MaterialsHelper::getGh();
@@ -173,12 +180,12 @@ class UseSummaryController extends Controller
                     $capacity = isset($gh_data['capacity']) ? $gh_data['capacity'] : '';
                     $gh_amount = isset($gh_data['gh_amount']) ? $gh_data['gh_amount'] : '';
 
-                    $m_u_cement = isset($gh_data['m_u_cement']) ? $gh_data['m_u_cement'] : '';
-                    $m_u_ash = isset($gh_data['m_u_ash']) ? $gh_data['m_u_ash'] : '';
-                    $m_u_gravel = isset($gh_data['m_u_gravel']) ? $gh_data['m_u_gravel'] : '';
-                    $m_u_sand = isset($gh_data['m_u_sand']) ? $gh_data['m_u_sand'] : '';
-                    $m_u_river_sand = isset($gh_data['m_u_river_sand']) ? $gh_data['m_u_river_sand'] : '';
-                    $m_u_additive = isset($gh_data['m_u_additive']) ? $gh_data['m_u_additive'] : '';
+                    $m_u_cement = isset($gh_data['m_u_cement']) ? $gh_data['m_u_cement'] : 0;
+                    $m_u_ash = isset($gh_data['m_u_ash']) ? $gh_data['m_u_ash'] : 0;
+                    $m_u_gravel = isset($gh_data['m_u_gravel']) ? $gh_data['m_u_gravel'] : 0;
+                    $m_u_sand = isset($gh_data['m_u_sand']) ? $gh_data['m_u_sand'] : 0;
+                    $m_u_river_sand = isset($gh_data['m_u_river_sand']) ? $gh_data['m_u_river_sand'] : 0;
+                    $m_u_additive = isset($gh_data['m_u_additive']) ? $gh_data['m_u_additive'] : 0;
 
                     //今日总量求和
                     $today_total_cement += $m_u_cement;
