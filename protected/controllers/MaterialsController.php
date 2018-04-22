@@ -23,6 +23,7 @@ class MaterialsController extends Controller
 
     public function actionAdd()
     {
+       // var_dump($_REQUEST);
         if(!empty($_POST)){
             Materials::putData($_POST);
             echo json_encode(['status'=>0]);exit;
@@ -58,6 +59,14 @@ class MaterialsController extends Controller
         $status = !empty($ret) ? 0 : 40003;
         ResponseHelper::backFormat($status);
 
+    }
+
+    public function actionFactory()
+    {
+        $key = Yii::app()->request->getParam('type');
+
+        $factoryName = MaterialsHelper::getFactoryName($key);
+        ResponseHelper::backFormat(0,$factoryName);
     }
 
 }

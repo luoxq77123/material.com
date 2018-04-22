@@ -130,7 +130,7 @@ class Materials extends CActiveRecord
             $batch = date("YmdHis");
             $dateTime = date("Y-m-d H:i:s");
             $insert = <<<sql
-                INSERT INTO ml_materials (ml_id,su_id,ml_no,ku_nums,num,user_cl,remarks,create_time,update_time,add_time,batch) 
+                INSERT INTO ml_materials (ml_id,su_id,ml_no,ku_nums,num,user_cl,remarks,create_time,update_time,add_time,batch)
                 VALUES(:ml_id,:su_id,:ml_no,:ku_nums,:num,:user_cl,:remarks,:create_time,:update_time,:add_time,:batch)
 sql;
             $connection = Yii::app()->db;
@@ -140,6 +140,7 @@ sql;
 
             try {
                 foreach ($data['t'] as $val) {
+
                     $num = is_numeric($val['num']) ? $val['num'] * 1000 : 0;
                     if (empty($num) || empty($val['add_time'])) {
                         continue;

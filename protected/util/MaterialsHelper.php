@@ -27,7 +27,7 @@ class MaterialsHelper
     public static function getFactoryName($key='')
     {
         $factoryName = [
-            'cement'=>['保山昆钢嘉华水泥有限公司'],//水泥
+            'cement'=>['保山昆钢嘉华水泥有限公司','盈江海螺水泥'],//水泥
             'ash'=>['永俊建材有限公司'],//火山灰
             'gravel'=>['腾冲德瑞矿业有限公司'],//碎石
             'sand'=>['腾冲德瑞矿业有限公司'],//机制砂

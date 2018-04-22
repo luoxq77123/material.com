@@ -16,40 +16,38 @@
        <td width="80">备注</td>
     </tr>
     <?php
-    $materialName = MaterialsHelper::getMaterialName();
-    $id_key=1;
-    foreach($materialName as $key=>$val){
-        $factoryName = MaterialsHelper::getFactoryName($key);
+        $materialName = MaterialsHelper::getMaterialName();
+
         $materialsUser = MaterialsHelper::getMaterialsUser();
         ?>
 
-        <tr class="<?= $key ?>" align="center">
-            <td><input type="hidden" name="ml_id" value="<?= $key ?>" ><?= $val ?></td>
-            <td><input type="text" name="add_time" id="add_time<?= $id_key?>" value=""></td>
+        <tr class="" align="center">
             <td>
-                <select name="su_id" id="su_id<?=$id_key?>">
-                    <?php foreach ($factoryName as $f_key=>$factory){ ?>
-                        <option value="<?= $f_key ?>"><?= $factory ?></option>
+                <select id="material_name">
+                    <option value="0">--请选择--</option>
+                    <?php foreach($materialName as $k=>$val){ ?>
+                        <option value="<?= $k ?>"><?= $val ?></option>
                     <?php } ?>
                 </select>
             </td>
-            <td><input type="text" name="ml_no" value=""> </td>
-            <td><input type="text" name="ku_nums" value=""> </td>
-            <td><input type="text" name="num" value=""> </td>
+            <td><input type="text" name="add_time" id="add_time" value=""></td>
             <td>
-                <select name="user_cl" id="user_cl<?=$id_key?>">
+                <select name="su_id" id="su_id">
+
+                </select>
+            </td>
+            <td><input type="text" name="ml_no" id='ml_no' value=""> </td>
+            <td><input type="text" name="ku_nums" id='ku_nums' value=""> </td>
+            <td><input type="text" name="num" id='num' value=""> </td>
+            <td>
+                <select name="user_cl" id="user_cl">
                     <?php foreach ($materialsUser as $m_key=>$materials){ ?>
                         <option value="<?= $m_key ?>"><?= $materials ?></option>
                     <?php } ?>
                 </select>
             </td>
-            <td><input type="text" name="remarks" value=""> </td>
+            <td><input type="text" name="remarks" id='remarks' value=""> </td>
         </tr>
-
-    <?php
-        $id_key++;
-    } ?>
-
     <tr>
         <input type="hidden" name="status" id="status" value="0">
         <td colspan="8" align="center" >
@@ -68,44 +66,72 @@
 
     $('#button').on('click',function(){
         var sta = $("#status").val();
-        console.log(sta);
+
         if(sta !=0 ){
             return false;
         }
-        $("#status").val(1);
-        var datas = [];
-    	for(var i = 1 ; i < $('table tr').length - 1;i ++){
-            var su_id = $("#su_id"+i).val();
-            var user_cl = $("#user_cl"+i).val();
-    		var temp = {};
-    		for(var j = 0 ; j < $('table tr').eq(i).find('td').length-2 ; j ++){
-                var oInput = $('table tr').eq(i).find('input').eq(j);
-    			(function(obj){
-    				temp[obj.attr('name')] = obj.val();
-    			})(oInput)
-                temp['su_id']=su_id;
-                temp['user_cl']=user_cl;
-    		}
-    		datas.push(temp);
+
+        if ($("#material_name").val() == 0) {
+            alert("请选择材料");
+            return false;
         }
 
-        //console.log(datas)
+        var datas = [];
+        var temp = {};
+        temp['ml_id']=$("#material_name").val();
+        temp['add_time']=$("#add_time").val();
+        temp['su_id']=$("#su_id").val();
+        temp['ml_no']=$("#ml_no").val();
+        temp['ku_nums']=$("#ku_nums").val();
+        temp['num']=$("#num").val();
+        temp['user_cl']=$("#user_cl").val();
+        temp['remarks']=$("#remarks").val();
+
+
+        //$("#status").val(1);
+        datas.push(temp);
+        console.log(datas)
         $.ajax({
-                    url:"<?= $this->createUrl("/materials/add") ?>",
-                    type:"POST",
-                    dataType:"json",
-                    data:{t:datas},
-                    success: function (result) {
-                        window.location.href = '<?= $this->createUrl("/materials/index"); ?>';
-                    }
+            url: "<?= $this->createUrl("/materials/add") ?>",
+            type: "post",
+            dataType: "json",
+            data: {t: datas},
+            success: function (result) {
+                window.location.href = '<?= $this->createUrl("/materials/index"); ?>';
+            }
         })
     });
 
     /*时间控件开始*/
-    <?php for ($i=1;$i<7;$i++){  ?>
-        laydate.render({
-            elem: '#add_time<?= $i ?>'
-        });
-    <?php } ?>
+    laydate.render({
+        elem: '#add_time'
+    });
     /*时间控件结束*/
+
+    /*下拉列表S*/
+    $('#material_name').on('change',function(){
+        var type = $("#material_name").val();
+        var sta = $("#status").val();
+                $.ajax({
+                    url: '<?= $this->createUrl("/materials/factory") ?>',
+                    type: "post",
+                    dataType: "json",
+                    data: {type:type},
+                    success: function (ret) {
+                        var data = ret.data;
+                        var optionstring = "";
+                        for (var i in data) {
+                            var jsonObj =data[i];
+                            console.log(jsonObj);
+                            optionstring += "<option value='"+i+"' >" + jsonObj + "</option>";
+                            $("#su_id").html(optionstring);
+                        }
+                    },
+                    error: function (msg) {
+                        alert("出错了！");
+                    }
+                });
+            });
+
+    /*下拉列表e*/
 </script>
